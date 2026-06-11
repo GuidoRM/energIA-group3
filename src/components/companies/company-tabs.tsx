@@ -38,7 +38,7 @@ export function CompanyTabs({
             className={cn(
               "flex items-center gap-1.5 whitespace-nowrap border-b-2 px-3 py-3 text-sm font-medium transition-colors",
               active
-                ? "border-primary text-foreground"
+                ? "border-[#aa3000] text-foreground"
                 : "border-transparent text-muted-foreground hover:text-foreground",
             )}
           >
