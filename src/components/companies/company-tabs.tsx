@@ -19,7 +19,7 @@ export function CompanyTabs({ companyId }: { companyId: string }) {
   const base = `/companies/${companyId}`;
 
   return (
-    <nav className="flex gap-1 overflow-x-auto border-b border-border px-8">
+    <nav className="flex gap-1 overflow-x-auto border-b border-[#d2baa9]/40 px-8">
       {TABS.map((tab) => {
         const href = tab.segment ? `${base}/${tab.segment}` : base;
         const active =
@@ -30,10 +30,10 @@ export function CompanyTabs({ companyId }: { companyId: string }) {
             key={tab.segment}
             href={href}
             className={cn(
-              "whitespace-nowrap border-b-2 px-3 py-3 text-sm font-medium transition-colors",
+              "whitespace-nowrap border-b-2 px-3 py-3 text-sm font-semibold transition-colors",
               active
-                ? "border-[#aa3000] text-foreground"
-                : "border-transparent text-muted-foreground hover:text-foreground",
+                ? "border-[#aa3000] text-[#aa3000]"
+                : "border-transparent text-[#8A726B] hover:text-[#281813]",
             )}
           >
             {tab.label}

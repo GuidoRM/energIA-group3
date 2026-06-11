@@ -3,8 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 
 type ChatRole = "user" | "assistant";
@@ -108,10 +106,10 @@ export function ChatWindow({
   }
 
   return (
-    <div className="flex h-[calc(100vh-16rem)] flex-col rounded-xl border border-border bg-card">
-      <div ref={scrollRef} className="flex-1 space-y-4 overflow-y-auto p-6">
+    <div className="flex h-[calc(100vh-16rem)] flex-col rounded-2xl border border-[#e5beb3] bg-white shadow-sm overflow-hidden font-sans">
+      <div ref={scrollRef} className="flex-1 space-y-4 overflow-y-auto p-6 bg-[#fff8f6]/30">
         {messages.length === 0 && (
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-[#8A726B] font-medium pl-2">
             Hablá con Hermes para construir el gemelo digital de tu empresa.
           </p>
         )}
@@ -122,10 +120,10 @@ export function ChatWindow({
           >
             <div
               className={cn(
-                "max-w-[80%] whitespace-pre-wrap rounded-2xl px-4 py-2 text-sm",
+                "max-w-[80%] whitespace-pre-wrap rounded-2xl px-4 py-2.5 text-sm font-medium shadow-sm border transition-all duration-200",
                 m.role === "user"
-                  ? "bg-primary text-primary-foreground"
-                  : "bg-secondary text-secondary-foreground",
+                  ? "bg-[#FD5212] text-white border-[#FD5212] rounded-tr-none"
+                  : "bg-[#E8D7CA] text-[#281813] border-[#d2baa9]/40 rounded-tl-none",
               )}
             >
               {m.content || (streaming ? "…" : "")}
@@ -133,14 +131,17 @@ export function ChatWindow({
           </div>
         ))}
         {tool && (
-          <p className="text-xs italic text-muted-foreground">
-            🔧 El agente está usando <code>{tool}</code>…
-          </p>
+          <div className="flex justify-start">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold text-[#C15735] bg-[#fff8f6] border border-[#e5beb3] shadow-sm animate-pulse">
+              <span>🔧</span>
+              <span>El agente está usando <code className="bg-[#E8D7CA]/40 px-1 py-0.5 rounded font-mono text-[10px]">{tool}</code>…</span>
+            </div>
+          </div>
         )}
       </div>
 
-      <div className="flex items-end gap-2 border-t border-border p-3">
-        <Textarea
+      <div className="flex items-end gap-2 border-t border-[#e5beb3] p-4 bg-[#fff8f6]/40">
+        <textarea
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => {
@@ -149,13 +150,18 @@ export function ChatWindow({
               send();
             }
           }}
-          placeholder="Escribí un mensaje…  (Enter para enviar)"
-          className="min-h-12 resize-none"
+          placeholder="Escribí un mensaje… (Enter para enviar)"
+          className="flex-1 min-h-[44px] max-h-[120px] resize-none px-4 py-2.5 border border-[#e5beb3] rounded-xl bg-white text-sm text-[#281813] placeholder:text-[#5c4038]/50 focus:outline-none focus:ring-2 focus:ring-[#FD5212] focus:border-transparent transition-all duration-200"
           disabled={streaming}
+          rows={1}
         />
-        <Button onClick={send} disabled={streaming || !input.trim()}>
+        <button
+          onClick={send}
+          disabled={streaming || !input.trim()}
+          className="flex justify-center items-center py-2.5 px-6 h-[44px] rounded-full text-sm font-bold text-white bg-[#FD5212] hover:bg-[#e0450b] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#FD5212] transition-all duration-200 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none cursor-pointer shadow-sm"
+        >
           Enviar
-        </Button>
+        </button>
       </div>
     </div>
   );
