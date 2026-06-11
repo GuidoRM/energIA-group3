@@ -1,0 +1,21 @@
+import { sql } from "drizzle-orm";
+import { NextResponse } from "next/server";
+
+import { db } from "@/server/db";
+
+/**
+ * Health check — verifies the API is up and the database is reachable.
+ * GET /api/health
+ */
+export async function GET() {
+  try {
+    await db.execute(sql`SELECT 1`);
+    return NextResponse.json({ status: "ok", database: "up" });
+  } catch (error) {
+    console.error("Health check failed:", error);
+    return NextResponse.json(
+      { status: "error", database: "down" },
+      { status: 503 },
+    );
+  }
+}
