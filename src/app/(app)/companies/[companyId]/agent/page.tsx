@@ -8,17 +8,21 @@ export default async function AgentPage({
   searchParams,
 }: {
   params: Promise<{ companyId: string }>;
-  searchParams: Promise<{ c?: string }>;
+  searchParams: Promise<{ c?: string; new?: string }>;
 }) {
   const { companyId } = await params;
-  const { c: activeConversationId } = await searchParams;
+  const { c: activeConversationId, new: isNew } = await searchParams;
 
   const conversations = await conversationService.listByCompany(companyId);
 
-  // Si hay ?c= en la URL, usar esa conversación; si no, la más reciente.
-  const active = activeConversationId
-    ? conversations.find((conv) => conv.id === activeConversationId)
-    : conversations[0];
+  // ?new=1  → chat vacío (usuario eligió "Nueva conversación")
+  // ?c=uuid → carga esa conversación
+  // sin params → abre la más reciente (primer acceso)
+  const active = isNew
+    ? undefined
+    : activeConversationId
+      ? conversations.find((conv) => conv.id === activeConversationId)
+      : conversations[0];
 
   const messages = active
     ? await conversationService.listMessages(active.id)

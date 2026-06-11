@@ -32,7 +32,7 @@ export function ConversationSidebar({
   const router = useRouter();
 
   function startNew() {
-    router.push(`/companies/${companyId}/agent`);
+    router.push(`/companies/${companyId}/agent?new=1`);
   }
 
   return (
