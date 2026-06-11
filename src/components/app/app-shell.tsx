@@ -7,6 +7,7 @@ import { useState } from "react";
 import { apiFetch } from "@/lib/client";
 import { cn } from "@/lib/utils";
 import type { SessionUser } from "@/lib/types";
+import { ChatDrawer } from "@/components/chat/chat-drawer";
 
 export function AppShell({
   user,
@@ -18,6 +19,7 @@ export function AppShell({
   const pathname = usePathname();
   const router = useRouter();
   const [profileOpen, setProfileOpen] = useState(false);
+  const [chatOpen, setChatOpen] = useState(false);
 
   async function logout() {
     await apiFetch("/api/auth/logout", { method: "POST" });
@@ -27,6 +29,7 @@ export function AppShell({
 
   // Inside a specific company → hide sidebar, show compact top bar
   const isInsideCompany = /^\/companies\/[^/]+/.test(pathname);
+  const companyId = pathname.match(/^\/companies\/([^/]+)/)?.[1];
 
   if (isInsideCompany) {
     return (
@@ -53,6 +56,17 @@ export function AppShell({
           </Link>
 
           <div className="flex-1" />
+
+          {/* Agente button */}
+          <button
+            onClick={() => setChatOpen(true)}
+            className="flex items-center gap-2 rounded-full border border-[#0ea5e9]/30 bg-[#0ea5e9]/8 px-3.5 py-1.5 text-sm font-semibold text-[#0ea5e9] hover:bg-[#0ea5e9]/15 transition-colors"
+          >
+            <svg className="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z" />
+            </svg>
+            Agente
+          </button>
 
           {/* Profile button */}
           <div className="relative">
@@ -101,6 +115,14 @@ export function AppShell({
         </header>
 
         <main className="flex-1 overflow-x-hidden bg-[#f8fafc]">{children}</main>
+
+        {companyId && (
+          <ChatDrawer
+            companyId={companyId}
+            open={chatOpen}
+            onClose={() => setChatOpen(false)}
+          />
+        )}
       </div>
     );
   }

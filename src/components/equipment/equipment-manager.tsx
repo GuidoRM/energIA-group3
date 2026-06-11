@@ -49,8 +49,39 @@ export function EquipmentManager({
     router.refresh();
   }
 
+  const gasCount = initial.filter((e) => e.vector === "gas").length;
+  const elecCount = initial.filter((e) => e.vector === "electricity").length;
+  const totalConsumption = initial.reduce((sum, e) => sum + e.monthlyConsumption, 0);
+  const avgHours =
+    initial.length > 0
+      ? initial.reduce((sum, e) => sum + Number(e.hoursPerDay), 0) / initial.length
+      : 0;
+
   return (
     <div className="space-y-6">
+      {/* Section header */}
+      <div>
+        <h2 className="text-lg font-bold text-[#0f172a]">Ítems de consumo</h2>
+        <p className="mt-0.5 text-sm text-[#64748b]">
+          Registrá cada equipo o proceso con su vector energético, potencia y horas de uso.
+        </p>
+      </div>
+
+      {/* Stat cards */}
+      {initial.length > 0 && (
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <EqStatCard label="Total equipos" value={String(initial.length)} sub="Registrados" accent="#6366f1" />
+          <EqStatCard label="Gas natural" value={String(gasCount)} sub={gasCount === 1 ? "equipo" : "equipos"} accent="#f59e0b" dotColor="bg-[#f59e0b]" />
+          <EqStatCard label="Electricidad" value={String(elecCount)} sub={elecCount === 1 ? "equipo" : "equipos"} accent="#0ea5e9" dotColor="bg-[#0ea5e9]" />
+          <EqStatCard
+            label="Consumo total"
+            value={formatNumber(totalConsumption)}
+            sub={`Prom. ${avgHours.toFixed(1)} h/día`}
+            accent="#22c55e"
+          />
+        </div>
+      )}
+
       <div className="bg-white rounded-[16px] border border-[#e5beb3] p-6 sm:p-8 w-full shadow-sm">
         <form onSubmit={add} className="grid items-end gap-4 sm:grid-cols-6">
           {/* Name Input */}
@@ -238,6 +269,32 @@ export function EquipmentManager({
           </table>
         </div>
       )}
+    </div>
+  );
+}
+
+function EqStatCard({
+  label,
+  value,
+  sub,
+  accent,
+  dotColor,
+}: {
+  label: string;
+  value: string;
+  sub: string;
+  accent: string;
+  dotColor?: string;
+}) {
+  return (
+    <div className="relative overflow-hidden rounded-2xl border border-[#e2e8f0] bg-white p-4 shadow-sm">
+      <div className="absolute right-0 top-0 h-16 w-16 rounded-bl-full opacity-[0.07]" style={{ background: accent }} />
+      <div className="flex items-start justify-between">
+        <p className="text-xs font-semibold text-[#64748b]">{label}</p>
+        {dotColor && <span className={`mt-0.5 h-2 w-2 rounded-full ${dotColor}`} />}
+      </div>
+      <p className="mt-1.5 text-2xl font-black text-[#0f172a]">{value}</p>
+      <p className="mt-0.5 text-[11px] text-[#94a3b8]">{sub}</p>
     </div>
   );
 }

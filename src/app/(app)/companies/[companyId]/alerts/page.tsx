@@ -9,5 +9,16 @@ export default async function AlertsPage({
 }) {
   const { companyId } = await params;
   const alerts = await alertService.listByCompany(companyId);
-  return <AlertsList initial={alerts} />;
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <h2 className="text-lg font-bold text-[#0f172a]">Centro de Alertas</h2>
+        <p className="mt-0.5 text-sm text-[#64748b]">
+          Monitoreo de consumo y costos energéticos · Se generan automáticamente al proyectar consumos fuera del umbral.
+        </p>
+      </div>
+      <AlertsList initial={alerts} />
+    </div>
+  );
 }

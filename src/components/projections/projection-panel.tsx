@@ -41,8 +41,56 @@ export function ProjectionPanel({
     }
   }
 
+  const latest = initial[0];
+  const maxVar = initial.length > 0 ? Math.max(...initial.map((p) => Number(p.variationPct ?? 0))) : null;
+  const minVar = initial.length > 0 ? Math.min(...initial.map((p) => Number(p.variationPct ?? 0))) : null;
+  const avgCost =
+    initial.length > 0
+      ? initial.reduce((sum, p) => sum + Number(p.estimatedCost), 0) / initial.length
+      : null;
+
   return (
     <div className="space-y-6">
+      {/* Section header */}
+      <div>
+        <h2 className="text-lg font-bold text-[#0f172a]">Proyecciones de consumo</h2>
+        <p className="mt-0.5 text-sm text-[#64748b]">
+          Estimaciones de costo y consumo energético modeladas a partir de la temperatura prevista.
+        </p>
+      </div>
+
+      {/* Stat cards */}
+      {initial.length > 0 && (
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <ProjStatCard
+            label="Proyecciones totales"
+            value={String(initial.length)}
+            sub="Períodos calculados"
+            accent="#6366f1"
+          />
+          <ProjStatCard
+            label="Última proyección"
+            value={latest ? formatCurrency(latest.estimatedCost) : "—"}
+            sub={latest ? `${monthName(latest.month)} ${latest.year}` : ""}
+            accent="#0ea5e9"
+            dotColor="bg-[#0ea5e9]"
+          />
+          <ProjStatCard
+            label="Mayor variación"
+            value={maxVar !== null ? `${maxVar > 0 ? "+" : ""}${formatPct(maxVar)}` : "—"}
+            sub="Pico máximo registrado"
+            accent="#ef4444"
+            dotColor="bg-[#ef4444]"
+          />
+          <ProjStatCard
+            label="Costo promedio"
+            value={avgCost !== null ? formatCurrency(avgCost) : "—"}
+            sub="Promedio de todos los períodos"
+            accent="#22c55e"
+          />
+        </div>
+      )}
+
       <div className="bg-white rounded-[16px] border border-[#e2e8f0] p-6 sm:p-8 w-full shadow-sm">
         <h3 className="text-lg font-bold text-[#0f172a] mb-4">Generar proyección</h3>
         <form onSubmit={generate} className="flex flex-wrap items-end gap-4">
@@ -131,6 +179,32 @@ export function ProjectionPanel({
           </table>
         </div>
       )}
+    </div>
+  );
+}
+
+function ProjStatCard({
+  label,
+  value,
+  sub,
+  accent,
+  dotColor,
+}: {
+  label: string;
+  value: string;
+  sub: string;
+  accent: string;
+  dotColor?: string;
+}) {
+  return (
+    <div className="relative overflow-hidden rounded-2xl border border-[#e2e8f0] bg-white p-4 shadow-sm">
+      <div className="absolute right-0 top-0 h-16 w-16 rounded-bl-full opacity-[0.07]" style={{ background: accent }} />
+      <div className="flex items-start justify-between">
+        <p className="text-xs font-semibold text-[#64748b]">{label}</p>
+        {dotColor && <span className={`mt-0.5 h-2 w-2 rounded-full ${dotColor}`} />}
+      </div>
+      <p className="mt-1.5 text-2xl font-black text-[#0f172a]">{value}</p>
+      <p className="mt-0.5 text-[11px] text-[#94a3b8]">{sub}</p>
     </div>
   );
 }

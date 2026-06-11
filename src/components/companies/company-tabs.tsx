@@ -11,7 +11,6 @@ const TABS = [
   { segment: "climate", label: "Clima" },
   { segment: "projections", label: "Proyecciones" },
   { segment: "alerts", label: "Alertas" },
-  { segment: "agent", label: "Agente" },
 ];
 
 export function CompanyTabs({

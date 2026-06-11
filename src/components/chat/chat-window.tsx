@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import ReactMarkdown from "react-markdown";
 
 import { cn } from "@/lib/utils";
 
@@ -45,8 +46,10 @@ export function ChatWindow({
   const [streaming, setStreaming] = useState(false);
   const [tool, setTool] = useState<string | null>(null);
   const [alertBanners, setAlertBanners] = useState<AlertBanner[]>([]);
+  const [focused, setFocused] = useState(false);
   const conversationId = useRef(initialConversationId);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   // Sync when parent re-renders with a new conversation
   useEffect(() => {
@@ -59,10 +62,20 @@ export function ChatWindow({
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight });
   }, [messages, tool, alertBanners]);
 
+  function handleInput(e: React.ChangeEvent<HTMLTextAreaElement>) {
+    setInput(e.target.value);
+    const el = e.target;
+    el.style.height = "auto";
+    el.style.height = `${Math.min(el.scrollHeight, 160)}px`;
+  }
+
   async function send() {
     const text = input.trim();
     if (!text || streaming) return;
     setInput("");
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+    }
     setStreaming(true);
     setTool(null);
     setMessages((m) => [...m, { role: "user", content: text }, { role: "assistant", content: "" }]);
@@ -166,9 +179,21 @@ export function ChatWindow({
     >
       <div ref={scrollRef} className="flex-1 space-y-4 overflow-y-auto p-6 bg-[#f8fafc]/50">
         {messages.length === 0 && alertBanners.length === 0 && (
-          <p className="text-sm text-[#64748b] font-medium pl-2">
-            Hablá con Hermes para construir el gemelo digital de tu empresa.
-          </p>
+          <div className="flex flex-col gap-3 pt-2">
+            <div className="flex items-start gap-3">
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#0ea5e9] to-[#22d3ee] shadow-sm shadow-[#0ea5e9]/20">
+                <svg className="h-4 w-4 text-white" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M11 21v-9H5L13 3v9h6L11 21z" />
+                </svg>
+              </div>
+              <div className="rounded-2xl rounded-tl-none border border-[#e0f2fe] bg-[#f0f9ff] px-4 py-3 text-sm text-[#0369a1]">
+                <p className="font-semibold leading-snug">¡Hola! Soy tu Copiloto Energético.</p>
+                <p className="mt-1 text-[#0284c7] leading-relaxed">
+                  Puedo ayudarte a analizar consumo, proyectar costos, cargar equipos y optimizar tu gasto energético. ¿Por dónde empezamos?
+                </p>
+              </div>
+            </div>
+          </div>
         )}
         {messages.map((m, i) => (
           <div
@@ -177,13 +202,63 @@ export function ChatWindow({
           >
             <div
               className={cn(
-                "max-w-[80%] whitespace-pre-wrap rounded-2xl px-4 py-2.5 text-sm font-medium shadow-sm border transition-all duration-200",
+                "max-w-[80%] rounded-2xl px-4 py-2.5 text-sm shadow-sm border transition-all duration-200",
                 m.role === "user"
                   ? "bg-[#0f172a] text-white border-[#0f172a] rounded-tr-none"
                   : "bg-[#f1f5f9] text-[#0f172a] border-[#e2e8f0] rounded-tl-none",
               )}
             >
-              {m.content || (streaming ? "…" : "")}
+              {m.content ? (
+                <ReactMarkdown
+                  components={{
+                    p: ({ children }) => <p className="mb-2 last:mb-0 leading-relaxed">{children}</p>,
+                    strong: ({ children }) => <strong className="font-bold">{children}</strong>,
+                    em: ({ children }) => <em className="italic">{children}</em>,
+                    ul: ({ children }) => <ul className="mb-2 ml-4 list-disc space-y-1 last:mb-0">{children}</ul>,
+                    ol: ({ children }) => <ol className="mb-2 ml-4 list-decimal space-y-1 last:mb-0">{children}</ol>,
+                    li: ({ children }) => <li className="leading-relaxed">{children}</li>,
+                    code: ({ children, className }) => {
+                      const isBlock = className?.includes("language-");
+                      return isBlock ? (
+                        <code className={cn(
+                          "block rounded-lg px-3 py-2 font-mono text-xs leading-relaxed whitespace-pre-wrap",
+                          m.role === "user"
+                            ? "bg-white/10 text-white/90"
+                            : "bg-[#e2e8f0] text-[#0f172a]",
+                        )}>{children}</code>
+                      ) : (
+                        <code className={cn(
+                          "rounded px-1 py-0.5 font-mono text-[11px]",
+                          m.role === "user"
+                            ? "bg-white/15 text-white"
+                            : "bg-[#e2e8f0] text-[#0f172a]",
+                        )}>{children}</code>
+                      );
+                    },
+                    pre: ({ children }) => <pre className="mb-2 last:mb-0 overflow-x-auto">{children}</pre>,
+                    h1: ({ children }) => <h1 className="mb-2 text-base font-bold">{children}</h1>,
+                    h2: ({ children }) => <h2 className="mb-1.5 text-sm font-bold">{children}</h2>,
+                    h3: ({ children }) => <h3 className="mb-1 text-sm font-semibold">{children}</h3>,
+                    blockquote: ({ children }) => (
+                      <blockquote className={cn(
+                        "my-2 border-l-2 pl-3 italic",
+                        m.role === "user" ? "border-white/30 text-white/80" : "border-[#0ea5e9] text-[#64748b]",
+                      )}>{children}</blockquote>
+                    ),
+                    hr: () => <hr className={cn("my-2", m.role === "user" ? "border-white/20" : "border-[#e2e8f0]")} />,
+                    a: ({ children, href }) => (
+                      <a href={href} target="_blank" rel="noopener noreferrer"
+                        className={cn("underline underline-offset-2", m.role === "user" ? "text-cyan-300" : "text-[#0ea5e9]")}>
+                        {children}
+                      </a>
+                    ),
+                  }}
+                >
+                  {m.content}
+                </ReactMarkdown>
+              ) : (
+                streaming ? <span className="opacity-60">…</span> : null
+              )}
             </div>
           </div>
         ))}
@@ -206,28 +281,62 @@ export function ChatWindow({
         ))}
       </div>
 
-      <div className="flex items-end gap-2 border-t border-[#e2e8f0] p-4 bg-white">
-        <textarea
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && !e.shiftKey) {
-              e.preventDefault();
-              send();
-            }
-          }}
-          placeholder="Escribí un mensaje… (Enter para enviar)"
-          className="flex-1 min-h-[44px] max-h-[120px] resize-none px-4 py-2.5 border border-[#e2e8f0] rounded-xl bg-white text-sm text-[#0f172a] placeholder:text-[#94a3b8] focus:outline-none focus:ring-2 focus:ring-[#0ea5e9] focus:border-transparent transition-all duration-200"
-          disabled={streaming}
-          rows={1}
-        />
-        <button
-          onClick={send}
-          disabled={streaming || !input.trim()}
-          className="flex justify-center items-center py-2.5 px-6 h-[44px] rounded-full text-sm font-bold text-white bg-[#0ea5e9] hover:bg-[#0284c7] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#0ea5e9] transition-all duration-200 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none cursor-pointer shadow-sm"
+      <div className="shrink-0 border-t border-[#e2e8f0] bg-white p-3">
+        <div
+          className={cn(
+            "relative rounded-2xl border transition-all duration-200",
+            focused
+              ? "border-[#0ea5e9] bg-white ring-2 ring-[#0ea5e9]/15"
+              : "border-[#e2e8f0] bg-[#f8fafc]",
+          )}
         >
-          Enviar
-        </button>
+          <textarea
+            ref={textareaRef}
+            value={input}
+            onChange={handleInput}
+            onFocus={() => setFocused(true)}
+            onBlur={() => setFocused(false)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                send();
+              }
+            }}
+            placeholder="Escribí un mensaje…"
+            className="w-full resize-none bg-transparent px-4 pb-11 pt-3.5 text-sm text-[#0f172a] placeholder:text-[#94a3b8] focus:outline-none"
+            style={{ minHeight: "52px", maxHeight: "160px" }}
+            disabled={streaming}
+            rows={1}
+          />
+
+          {/* Bottom bar integrada */}
+          <div className="absolute bottom-0 left-0 right-0 flex items-center justify-between px-3 pb-2.5">
+            <span className="select-none text-[11px] text-[#cbd5e1]">
+              Shift+Enter para nueva línea
+            </span>
+            <button
+              onClick={send}
+              disabled={streaming || !input.trim()}
+              className={cn(
+                "flex h-7 w-7 items-center justify-center rounded-full transition-all duration-200",
+                input.trim() && !streaming
+                  ? "bg-[#0ea5e9] text-white shadow-sm hover:bg-[#0284c7] active:scale-95 cursor-pointer"
+                  : "bg-[#e2e8f0] text-[#94a3b8] cursor-not-allowed",
+              )}
+            >
+              {streaming ? (
+                <svg className="h-3.5 w-3.5 animate-spin" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <path d="M21 12a9 9 0 1 1-6.219-8.56" strokeLinecap="round" />
+                </svg>
+              ) : (
+                <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="12" y1="19" x2="12" y2="5" />
+                  <polyline points="5 12 12 5 19 12" />
+                </svg>
+              )}
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );
