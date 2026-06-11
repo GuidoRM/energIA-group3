@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap");
 @import "tailwindcss";
 
 /*
@@ -7,59 +8,59 @@
  */
 
 :root {
-  --background: oklch(0.99 0 0);
-  --foreground: oklch(0.21 0.01 270);
+  --background: #FBF8F5;
+  --foreground: #281813;
 
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.21 0.01 270);
+  --card: #E8D7CA;
+  --card-foreground: #281813;
 
-  --primary: oklch(0.58 0.18 250);
-  --primary-foreground: oklch(0.99 0 0);
+  --primary: #FD5212;
+  --primary-foreground: #ffffff;
 
-  --secondary: oklch(0.96 0.01 250);
-  --secondary-foreground: oklch(0.21 0.01 270);
+  --secondary: #C15735;
+  --secondary-foreground: #ffffff;
 
-  --muted: oklch(0.96 0.01 250);
-  --muted-foreground: oklch(0.52 0.02 270);
+  --muted: #E8D7CA;
+  --muted-foreground: #8A726B;
 
-  --accent: oklch(0.7 0.16 160);
-  --accent-foreground: oklch(0.18 0.04 160);
+  --accent: #0092F0;
+  --accent-foreground: #ffffff;
 
-  --destructive: oklch(0.58 0.22 27);
-  --destructive-foreground: oklch(0.99 0 0);
+  --destructive: #ba1a1a;
+  --destructive-foreground: #ffffff;
 
-  --border: oklch(0.92 0.01 270);
-  --input: oklch(0.92 0.01 270);
-  --ring: oklch(0.58 0.18 250);
+  --border: #d2baa9;
+  --input: #FBF8F5;
+  --ring: #FD5212;
 
-  --radius: 0.625rem;
+  --radius: 0.75rem;
 }
 
 .dark {
-  --background: oklch(0.18 0.01 270);
-  --foreground: oklch(0.97 0 0);
+  --background: #1c1816;
+  --foreground: #f6f1ee;
 
-  --card: oklch(0.22 0.01 270);
-  --card-foreground: oklch(0.97 0 0);
+  --card: #2f2723;
+  --card-foreground: #f6f1ee;
 
-  --primary: oklch(0.66 0.17 250);
-  --primary-foreground: oklch(0.18 0.01 270);
+  --primary: #FD5212;
+  --primary-foreground: #ffffff;
 
-  --secondary: oklch(0.28 0.02 270);
-  --secondary-foreground: oklch(0.97 0 0);
+  --secondary: #d56c4a;
+  --secondary-foreground: #ffffff;
 
-  --muted: oklch(0.28 0.02 270);
-  --muted-foreground: oklch(0.7 0.02 270);
+  --muted: #2f2723;
+  --muted-foreground: #b39b94;
 
-  --accent: oklch(0.7 0.16 160);
-  --accent-foreground: oklch(0.18 0.04 160);
+  --accent: #0092F0;
+  --accent-foreground: #ffffff;
 
-  --destructive: oklch(0.62 0.2 27);
-  --destructive-foreground: oklch(0.99 0 0);
+  --destructive: #ff5c5c;
+  --destructive-foreground: #ffffff;
 
-  --border: oklch(0.3 0.01 270);
-  --input: oklch(0.32 0.01 270);
-  --ring: oklch(0.66 0.17 250);
+  --border: #4a3e39;
+  --input: #1c1816;
+  --ring: #FD5212;
 }
 
 @theme inline {
@@ -86,7 +87,7 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 
-  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 }
 
@@ -99,6 +100,21 @@
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .material-symbols-outlined {
+    font-family: 'Material Symbols Outlined';
+    font-weight: normal;
+    font-style: normal;
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    display: inline-block;
+    line-height: 1;
+    text-transform: none;
+    letter-spacing: normal;
+    word-wrap: normal;
+    white-space: nowrap;
+    direction: ltr;
     -webkit-font-smoothing: antialiased;
   }
 }
