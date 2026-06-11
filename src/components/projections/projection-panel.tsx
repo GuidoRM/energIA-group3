@@ -43,15 +43,15 @@ export function ProjectionPanel({
 
   return (
     <div className="space-y-6">
-      <div className="bg-white rounded-[16px] border border-[#e5beb3] p-6 sm:p-8 w-full shadow-sm">
-        <h3 className="text-lg font-bold text-[#281813] mb-4 font-sans">Generar proyección</h3>
+      <div className="bg-white rounded-[16px] border border-[#e2e8f0] p-6 sm:p-8 w-full shadow-sm">
+        <h3 className="text-lg font-bold text-[#0f172a] mb-4">Generar proyección</h3>
         <form onSubmit={generate} className="flex flex-wrap items-end gap-4">
           <div className="space-y-2">
-            <label className="block text-[11px] font-bold text-[#1a1a1a] uppercase tracking-wider" htmlFor="forecastTemp">
+            <label className="block text-[11px] font-bold text-[#64748b] uppercase tracking-wider" htmlFor="forecastTemp">
               Temperatura prevista (°C)
             </label>
             <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#5c4038]">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#64748b]">
                 <svg className="w-5 h-5 select-none" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M15 13V5c0-1.66-1.34-3-3-3S9 3.34 9 5v8c-1.21.91-2 2.37-2 4 0 2.76 2.24 5 5 5s5-2.24 5-5c0-1.63-.79-3.09-2-4zm-3-9c.55 0 1 .45 1 1v3h-2V5c0-.55.45-1 1-1z" />
                 </svg>
@@ -63,14 +63,14 @@ export function ProjectionPanel({
                 step="0.1"
                 defaultValue={suggestedTemp ?? undefined}
                 placeholder="promedio histórico"
-                className="block w-48 pl-10 pr-3 py-2.5 border border-[#e5beb3] rounded-lg bg-[#fff8f6] text-sm text-[#281813] placeholder:text-[#5c4038]/50 focus:outline-none focus:ring-2 focus:ring-[#FD5212] focus:border-transparent transition-all duration-200"
+                className="block w-48 pl-10 pr-3 py-2.5 border border-[#e2e8f0] rounded-lg bg-[#f8fafc] text-sm text-[#0f172a] placeholder:text-[#94a3b8] focus:outline-none focus:ring-2 focus:ring-[#0ea5e9] focus:border-transparent transition-all duration-200"
               />
             </div>
           </div>
           <button
             type="submit"
             disabled={loading}
-            className="flex justify-center items-center py-2.5 px-6 rounded-full text-sm font-bold text-white bg-[#FD5212] hover:bg-[#e0450b] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#FD5212] transition-all duration-200 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none cursor-pointer shadow-sm h-[42px]"
+            className="flex justify-center items-center py-2.5 px-6 rounded-full text-sm font-bold text-white bg-[#0ea5e9] hover:bg-[#0284c7] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#0ea5e9] transition-all duration-200 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none cursor-pointer shadow-sm h-[42px]"
           >
             {loading ? "Calculando…" : "Calcular"}
           </button>
@@ -86,13 +86,13 @@ export function ProjectionPanel({
       </div>
 
       {initial.length === 0 ? (
-        <p className="text-sm text-[#8A726B] font-medium pl-2">
+        <p className="text-sm text-[#64748b] font-medium pl-2">
           Todavía no hay proyecciones. Generá la primera.
         </p>
       ) : (
-        <div className="overflow-hidden rounded-2xl border border-[#d2baa9] bg-white shadow-sm">
+        <div className="overflow-hidden rounded-2xl border border-[#e2e8f0] bg-white shadow-sm">
           <table className="w-full text-sm">
-            <thead className="bg-[#E8D7CA]/80 text-left text-[#8A726B] border-b border-[#d2baa9]">
+            <thead className="bg-[#f8fafc] text-left text-[#64748b] border-b border-[#e2e8f0]">
               <tr>
                 <th className="px-5 py-3.5 font-bold uppercase tracking-wider text-xs">Período</th>
                 <th className="px-5 py-3.5 text-right font-bold uppercase tracking-wider text-xs">Temp.</th>
@@ -105,21 +105,21 @@ export function ProjectionPanel({
               {initial.map((p) => {
                 const variation = Number(p.variationPct ?? 0);
                 return (
-                  <tr key={p.id} className="border-t border-[#d2baa9]/40 hover:bg-[#E8D7CA]/10 transition-colors">
-                    <td className="px-5 py-3 font-bold text-[#281813]">
+                  <tr key={p.id} className="border-t border-[#e2e8f0]/60 hover:bg-[#f8fafc] transition-colors">
+                    <td className="px-5 py-3 font-bold text-[#0f172a]">
                       {monthName(p.month)} {p.year}
                     </td>
-                    <td className="px-5 py-3 text-right text-[#5c4038] font-semibold">{Number(p.forecastTemp)}°C</td>
-                    <td className="px-5 py-3 text-right text-[#5c4038] font-semibold">
+                    <td className="px-5 py-3 text-right text-[#64748b] font-semibold">{Number(p.forecastTemp)}°C</td>
+                    <td className="px-5 py-3 text-right text-[#64748b] font-semibold">
                       {formatNumber(p.estimatedConsumption)}
                     </td>
-                    <td className="px-5 py-3 text-right text-[#281813] font-bold">
+                    <td className="px-5 py-3 text-right text-[#0f172a] font-bold">
                       {formatCurrency(p.estimatedCost)}
                     </td>
                     <td
                       className={
                         "px-5 py-3 text-right font-bold " +
-                        (variation > 0 ? "text-[#ba1a1a]" : "text-[#0092F0]")
+                        (variation > 0 ? "text-[#ef4444]" : "text-[#0ea5e9]")
                       }
                     >
                       {variation > 0 ? "+" : ""}{formatPct(variation)}

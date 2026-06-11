@@ -33,7 +33,7 @@ export default async function AgentPage({
     .map((m) => ({ role: m.role as "user" | "assistant", content: m.content }));
 
   return (
-    <div className="flex h-[calc(100vh-14rem)] overflow-hidden rounded-xl border border-border bg-card">
+    <div className="flex h-[calc(100vh-14rem)] overflow-hidden rounded-2xl border border-[#e2e8f0] bg-white shadow-sm">
       <ConversationSidebar
         companyId={companyId}
         conversations={conversations}

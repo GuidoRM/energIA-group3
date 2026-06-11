@@ -51,7 +51,7 @@ export function CompanyCreateForm() {
     return (
       <button
         onClick={() => setOpen(true)}
-        className="flex items-center gap-2 py-3 px-6 rounded-full text-sm font-bold text-white bg-[#FD5212] hover:bg-[#e0450b] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#FD5212] transition-all duration-200 active:scale-[0.98] cursor-pointer shadow-sm"
+        className="flex items-center gap-2 py-3 px-6 rounded-full text-sm font-bold text-white bg-[#0ea5e9] hover:bg-[#0284c7] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#0ea5e9] transition-all duration-200 active:scale-[0.98] cursor-pointer shadow-sm"
       >
         <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
           <line x1="12" y1="5" x2="12" y2="19"></line>
@@ -63,7 +63,7 @@ export function CompanyCreateForm() {
   }
 
   return (
-    <div className="bg-white rounded-[16px] border border-[#e5beb3] p-6 sm:p-8 w-full shadow-sm mb-6 animate-fadeIn">
+    <div className="bg-white rounded-[16px] border border-[#e2e8f0] p-6 sm:p-8 w-full shadow-sm mb-6">
       <form onSubmit={onSubmit} className="grid gap-5 sm:grid-cols-2">
         {/* Name Input */}
         <div className="space-y-2 sm:col-span-2">
@@ -71,7 +71,7 @@ export function CompanyCreateForm() {
             Nombre de la empresa
           </label>
           <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#5c4038]">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#64748b]">
               <svg className="w-5 h-5 select-none" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z" />
               </svg>
@@ -82,7 +82,7 @@ export function CompanyCreateForm() {
               name="name"
               placeholder="Ej: Austral Energy"
               required
-              className="block w-full pl-10 pr-3 py-3 border border-[#e5beb3] rounded-lg bg-[#fff8f6] text-sm text-[#281813] placeholder:text-[#5c4038]/50 focus:outline-none focus:ring-2 focus:ring-[#FD5212] focus:border-transparent transition-all duration-200"
+              className="block w-full pl-10 pr-3 py-3 border border-[#e2e8f0] rounded-lg bg-[#f8fafc] text-sm text-[#281813] placeholder:text-[#64748b]/50 focus:outline-none focus:ring-2 focus:ring-[#0ea5e9] focus:border-transparent transition-all duration-200"
             />
           </div>
         </div>
@@ -93,7 +93,7 @@ export function CompanyCreateForm() {
             Rubro / Actividad
           </label>
           <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#5c4038]">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#64748b]">
               <svg className="w-5 h-5 select-none" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M20 6h-4V4c0-1.11-.89-2-2-2h-4c-1.11 0-2 .89-2 2v2H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-6 0h-4V4h4v2z" />
               </svg>
@@ -103,7 +103,7 @@ export function CompanyCreateForm() {
               id="industry"
               name="industry"
               placeholder="Ej: Metalúrgica"
-              className="block w-full pl-10 pr-3 py-3 border border-[#e5beb3] rounded-lg bg-[#fff8f6] text-sm text-[#281813] placeholder:text-[#5c4038]/50 focus:outline-none focus:ring-2 focus:ring-[#FD5212] focus:border-transparent transition-all duration-200"
+              className="block w-full pl-10 pr-3 py-3 border border-[#e2e8f0] rounded-lg bg-[#f8fafc] text-sm text-[#281813] placeholder:text-[#64748b]/50 focus:outline-none focus:ring-2 focus:ring-[#0ea5e9] focus:border-transparent transition-all duration-200"
             />
           </div>
         </div>
@@ -114,7 +114,7 @@ export function CompanyCreateForm() {
             Localidad
           </label>
           <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#5c4038]">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#64748b]">
               <svg className="w-5 h-5 select-none" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
               </svg>
@@ -122,7 +122,7 @@ export function CompanyCreateForm() {
             <select
               id="location"
               name="location"
-              className="block w-full pl-10 pr-8 py-3 border border-[#e5beb3] rounded-lg bg-[#fff8f6] text-sm text-[#281813] focus:outline-none focus:ring-2 focus:ring-[#FD5212] focus:border-transparent transition-all duration-200 cursor-pointer appearance-none"
+              className="block w-full pl-10 pr-8 py-3 border border-[#e2e8f0] rounded-lg bg-[#f8fafc] text-sm text-[#281813] focus:outline-none focus:ring-2 focus:ring-[#0ea5e9] focus:border-transparent transition-all duration-200 cursor-pointer appearance-none"
               defaultValue="rio_grande"
             >
               {LOCATIONS.map((l) => (
@@ -131,7 +131,7 @@ export function CompanyCreateForm() {
                 </option>
               ))}
             </select>
-            <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-[#5c4038]/70">
+            <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none text-[#64748b]/70">
               <svg className="w-4 h-4" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
               </svg>
@@ -145,7 +145,7 @@ export function CompanyCreateForm() {
             Tarifa gas ($/m³)
           </label>
           <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#5c4038]">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#64748b]">
               <svg className="w-5 h-5 select-none" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 2.69c.04.87-.1 1.76-.41 2.59-.47 1.25-1.31 2.33-2.31 3.22C7.23 10.36 5.86 12.87 6 15.65c.13 2.76 2.02 5.09 4.7 5.76.62.15 1.25.21 1.88.21s1.26-.06 1.88-.21c2.68-.67 4.57-3 4.7-5.76.14-2.78-1.23-5.29-3.28-7.15-1-1-1.84-2.07-2.31-3.22-.31-.83-.45-1.72-.41-2.59zM12 18c-1.66 0-3-1.34-3-3 0-1.32.74-2.46 1.84-3.03.46-.24.95-.45 1.16-.97.21.52.7.73 1.16.97C14.26 12.54 15 13.68 15 15c0 1.66-1.34 3-3 3z" />
               </svg>
@@ -157,7 +157,7 @@ export function CompanyCreateForm() {
               id="gasTariff"
               name="gasTariff"
               placeholder="0.0000"
-              className="block w-full pl-10 pr-3 py-3 border border-[#e5beb3] rounded-lg bg-[#fff8f6] text-sm text-[#281813] placeholder:text-[#5c4038]/50 focus:outline-none focus:ring-2 focus:ring-[#FD5212] focus:border-transparent transition-all duration-200"
+              className="block w-full pl-10 pr-3 py-3 border border-[#e2e8f0] rounded-lg bg-[#f8fafc] text-sm text-[#281813] placeholder:text-[#64748b]/50 focus:outline-none focus:ring-2 focus:ring-[#0ea5e9] focus:border-transparent transition-all duration-200"
             />
           </div>
         </div>
@@ -168,7 +168,7 @@ export function CompanyCreateForm() {
             Tarifa luz ($/kWh)
           </label>
           <div className="relative">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#5c4038]">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-[#64748b]">
               <svg className="w-5 h-5 select-none" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M11 21v-9H5L13 3v9h6L11 21z" />
               </svg>
@@ -180,7 +180,7 @@ export function CompanyCreateForm() {
               id="electricityTariff"
               name="electricityTariff"
               placeholder="0.0000"
-              className="block w-full pl-10 pr-3 py-3 border border-[#e5beb3] rounded-lg bg-[#fff8f6] text-sm text-[#281813] placeholder:text-[#5c4038]/50 focus:outline-none focus:ring-2 focus:ring-[#FD5212] focus:border-transparent transition-all duration-200"
+              className="block w-full pl-10 pr-3 py-3 border border-[#e2e8f0] rounded-lg bg-[#f8fafc] text-sm text-[#281813] placeholder:text-[#64748b]/50 focus:outline-none focus:ring-2 focus:ring-[#0ea5e9] focus:border-transparent transition-all duration-200"
             />
           </div>
         </div>
@@ -200,14 +200,14 @@ export function CompanyCreateForm() {
           <button
             type="submit"
             disabled={loading}
-            className="flex justify-center items-center py-2.5 px-6 rounded-full text-sm font-bold text-white bg-[#FD5212] hover:bg-[#e0450b] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#FD5212] transition-all duration-200 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
+            className="flex justify-center items-center py-2.5 px-6 rounded-full text-sm font-bold text-white bg-[#0ea5e9] hover:bg-[#0284c7] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#0ea5e9] transition-all duration-200 active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none cursor-pointer"
           >
             {loading ? "Creando…" : "Crear empresa"}
           </button>
           <button
             type="button"
             onClick={() => setOpen(false)}
-            className="flex justify-center items-center py-2.5 px-6 rounded-full text-sm font-bold text-[#8A726B] bg-transparent hover:bg-[#FBF8F5] border border-[#d2baa9] focus:outline-none transition-all duration-200 active:scale-[0.98] cursor-pointer"
+            className="flex justify-center items-center py-2.5 px-6 rounded-full text-sm font-bold text-[#64748b] bg-transparent hover:bg-[#f1f5f9] border border-[#e2e8f0] focus:outline-none transition-all duration-200 active:scale-[0.98] cursor-pointer"
           >
             Cancelar
           </button>

@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
 const TABS = [
@@ -26,27 +25,26 @@ export function CompanyTabs({
   const base = `/companies/${companyId}`;
 
   return (
-    <nav className="flex gap-1 overflow-x-auto border-b border-[#d2baa9]/40 px-8">
+    <nav className="flex gap-0 overflow-x-auto">
       {TABS.map((tab) => {
         const href = tab.segment ? `${base}/${tab.segment}` : base;
-        const active =
-          pathname === href || (tab.segment === "" && pathname === base);
+        const active = pathname === href || (tab.segment === "" && pathname === base);
         return (
           <Link
             key={tab.segment}
             href={href}
             className={cn(
-              "whitespace-nowrap border-b-2 px-3 py-3 text-sm font-semibold transition-colors",
+              "flex items-center gap-1.5 whitespace-nowrap border-b-2 px-4 py-3 text-sm font-semibold transition-colors",
               active
-                ? "border-[#aa3000] text-[#aa3000]"
-                : "border-transparent text-[#8A726B] hover:text-[#281813]",
+                ? "border-[#0ea5e9] text-[#0ea5e9]"
+                : "border-transparent text-[#64748b] hover:text-[#0f172a] hover:border-[#e2e8f0]",
             )}
           >
             {tab.label}
             {tab.segment === "alerts" && unreadAlerts > 0 && (
-              <Badge variant="destructive" className="h-4 min-w-4 px-1 py-0 text-[10px]">
+              <span className="flex h-4 min-w-4 items-center justify-center rounded-full bg-[#ef4444] px-1 text-[10px] font-bold text-white">
                 {unreadAlerts > 99 ? "99+" : unreadAlerts}
-              </Badge>
+              </span>
             )}
           </Link>
         );

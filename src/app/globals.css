@@ -2,64 +2,65 @@
 @import "tailwindcss";
 
 /*
- * Tailwind 4 — CSS-first configuration.
- * Design tokens live as CSS variables and are registered with Tailwind via
- * `@theme inline`, so classes like `bg-background` or `text-primary` work.
+ * EnergIA — Design System
+ * Primary:   #FD5212  orange  (actions, CTAs)
+ * Accent:    #0ea5e9  cyan    (the "IA" color — data, info, links)
+ * Dark:      #0f172a  navy    (sidebar, headings)
  */
 
 :root {
-  --background: #FBF8F5;
-  --foreground: #281813;
+  --background: #f8fafc;
+  --foreground: #0f172a;
 
-  --card: #E8D7CA;
-  --card-foreground: #281813;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
 
   --primary: #FD5212;
   --primary-foreground: #ffffff;
 
-  --secondary: #C15735;
+  --secondary: #0ea5e9;
   --secondary-foreground: #ffffff;
 
-  --muted: #E8D7CA;
-  --muted-foreground: #8A726B;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
 
-  --accent: #0092F0;
+  --accent: #0ea5e9;
   --accent-foreground: #ffffff;
 
-  --destructive: #ba1a1a;
+  --destructive: #ef4444;
   --destructive-foreground: #ffffff;
 
-  --border: #d2baa9;
-  --input: #FBF8F5;
+  --border: #e2e8f0;
+  --input: #ffffff;
   --ring: #FD5212;
 
   --radius: 0.75rem;
 }
 
 .dark {
-  --background: #1c1816;
-  --foreground: #f6f1ee;
+  --background: #0f172a;
+  --foreground: #f1f5f9;
 
-  --card: #2f2723;
-  --card-foreground: #f6f1ee;
+  --card: #1e293b;
+  --card-foreground: #f1f5f9;
 
   --primary: #FD5212;
   --primary-foreground: #ffffff;
 
-  --secondary: #d56c4a;
+  --secondary: #0ea5e9;
   --secondary-foreground: #ffffff;
 
-  --muted: #2f2723;
-  --muted-foreground: #b39b94;
+  --muted: #1e293b;
+  --muted-foreground: #94a3b8;
 
-  --accent: #0092F0;
+  --accent: #0ea5e9;
   --accent-foreground: #ffffff;
 
-  --destructive: #ff5c5c;
+  --destructive: #f87171;
   --destructive-foreground: #ffffff;
 
-  --border: #4a3e39;
-  --input: #1c1816;
+  --border: #334155;
+  --input: #1e293b;
   --ring: #FD5212;
 }
 
