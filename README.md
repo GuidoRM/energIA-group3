@@ -73,18 +73,36 @@ cp .env.example .env.local          # editá DATABASE_URL / JWT_SECRET si hace f
 npm run db:push                     # crea las tablas (o db:generate + db:migrate)
 npm run db:seed                     # coeficientes del modelo + clima IPIEC
 
-# 4. App
-npm run dev                         # http://localhost:3000
+# 4. Agente Hermes — proxy OpenAI-compatible (en otra terminal)
+hermes proxy start --port 8645      # http://127.0.0.1:8645/v1
 
-# 5. (opcional) Servidor MCP para Hermes
-npm run mcp                         # http://localhost:8000/mcp
-#   conectá Hermes con hermes.config.example.yaml (§9)
+# 5. App
+npm run dev                         # http://localhost:3000
 ```
 
-> **Chat sin Hermes:** con `HERMES_MOCK="true"` (default) el chat usa un stream
-> simulado, así la demo funciona sin el gateway corriendo. Poné `false` y
-> completá `HERMES_API_KEY` para usar el agente real. La API key vive **solo**
-> en el backend (RNF1).
+### Integración con Hermes (Opción A: el backend orquesta)
+
+El chat (`/api/companies/{id}/chat`) habla con el **proxy** de Hermes
+(`hermes proxy start`, OpenAI-compatible en `:8645`). El backend le pasa al
+modelo el system prompt de onboarding + las tools; cuando el modelo pide un
+`tool_call`, **el backend lo ejecuta** vía los services —con el `companyId`
+forzado server-side (RNF2)— y realimenta el resultado hasta la respuesta
+final, que se streamea a la UI (`src/services/hermes.service.ts` +
+`agent-tools.ts`). Así, lo que el usuario carga conversando aparece en las
+demás vistas (RF8.5). La API key vive **solo** en el backend (RNF1).
+
+- **Modelo:** `HERMES_MODEL` (default `stepfun/step-3.7-flash:free`, gratis y
+  con function-calling). `nousresearch/hermes-4-70b/405b` requieren créditos en
+  [portal.nousresearch.com](https://portal.nousresearch.com).
+  Listar: `curl -s http://127.0.0.1:8645/v1/models -H "Authorization: Bearer x"`.
+- **Sin proxy:** poné `HERMES_MOCK="true"` para un stream simulado (el chat
+  conversa pero no escribe en la DB).
+
+> **Hermes como agente autónomo (Opción B, alternativa):** registrar el MCP
+> server propio en Hermes con `hermes mcp add optimizer --url
+> http://localhost:8000/mcp` (`npm run mcp`) y conducir el agente desde su
+> CLI/gateway. Útil para usar la memoria/persona de Hermes; no necesario para
+> el chat de la UI.
 
 ## Scripts
 

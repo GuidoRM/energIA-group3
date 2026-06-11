@@ -51,7 +51,7 @@ export function POST(request: Request, ctx: Ctx) {
 
         try {
           for await (const event of hermesService.stream({
-            conversation: `company-${id}`,
+            companyId: id,
             systemPrompt: ONBOARDING_PROMPT,
             userMessage: input.message,
             history,
