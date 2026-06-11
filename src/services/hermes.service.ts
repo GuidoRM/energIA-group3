@@ -14,8 +14,7 @@ import { AGENT_TOOLS, executeAgentTool } from "@/services/agent-tools";
  * stream simulado para trabajar sin el proxy levantado.
  */
 
-/** §12 — onboarding por etapas, una pregunta por turno. */
-export const ONBOARDING_PROMPT = `Sos Hermes, asistente de onboarding de un optimizador energético para PyMEs de Tierra del Fuego.
+const BASE_PROMPT = `Sos Hermes, asistente de onboarding de un optimizador energético para PyMEs de Tierra del Fuego.
 Estás trabajando sobre UNA empresa ya creada (su id es implícito; nunca lo pidas ni lo manejes).
 Construís su "gemelo digital" conversando, una etapa a la vez:
 identity → equipment → operation → tariffs → complete.
@@ -28,6 +27,27 @@ Reglas:
   · para repasar lo cargado → list_equipment / profile_status
 - Al completar las etapas, llamá project_consumption con la temperatura prevista y mostrá la primera predicción de consumo y costo (el "momento mágico").
 Respondé en español, claro y breve.`;
+
+/** §12 — onboarding prompt base (sin contexto climático). */
+export const ONBOARDING_PROMPT = BASE_PROMPT;
+
+/**
+ * Construye el system prompt inyectando el contexto climático actual de la
+ * empresa, para que el modelo use la temperatura correcta al proyectar.
+ */
+export function buildSystemPrompt(
+  location: string,
+  monthLabel: string,
+  forecastTemp: number | null,
+): string {
+  if (forecastTemp === null) return BASE_PROMPT;
+  return (
+    BASE_PROMPT +
+    `\n\nContexto climático: la temperatura de referencia estadística para ` +
+    `${location} en ${monthLabel} es ${forecastTemp}°C (promedio histórico IPIEC 2023-2025). ` +
+    `Usá este valor en project_consumption salvo que el usuario indique otro.`
+  );
+}
 
 export type HermesEvent =
   | { type: "token"; value: string }

@@ -8,6 +8,7 @@ import type {
   CreateEquipmentInput,
   UpdateEquipmentInput,
 } from "@/lib/validation";
+import { onboardingService } from "./onboarding.service";
 
 /**
  * equipment.service — tabla `equipment`.
@@ -55,6 +56,7 @@ export const equipmentService = {
         processStage: input.processStage,
       })
       .returning();
+    await onboardingService.syncStage(companyId).catch(() => {});
     return row!;
   },
 
@@ -79,11 +81,14 @@ export const equipmentService = {
       .where(eq(equipment.id, id))
       .returning();
     if (!row) throw AppError.notFound("Equipo no encontrado");
+    await onboardingService.syncStage(row.companyId).catch(() => {});
     return row;
   },
 
   /** RF4.3 — eliminar equipo. */
   async remove(id: string): Promise<void> {
+    const eq_ = await this.getById(id);
     await db.delete(equipment).where(eq(equipment.id, id));
+    if (eq_) await onboardingService.syncStage(eq_.companyId).catch(() => {});
   },
 };

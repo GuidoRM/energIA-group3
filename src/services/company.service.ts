@@ -5,6 +5,7 @@ import { company } from "@/db/schema";
 import { AppError } from "@/lib/errors";
 import type { Company } from "@/lib/types";
 import type { CreateCompanyInput, UpdateCompanyInput } from "@/lib/validation";
+import { onboardingService } from "./onboarding.service";
 
 /**
  * company.service — único lugar que lee/escribe la tabla `company`.
@@ -56,6 +57,7 @@ export const companyService = {
         location: input.location,
         gasTariff: numericOrNull(input.gasTariff),
         electricityTariff: numericOrNull(input.electricityTariff),
+        profileCompletion: 20, // identity stage desde la creación
       })
       .returning();
     return row!;
@@ -85,6 +87,13 @@ export const companyService = {
       .where(eq(company.id, companyId))
       .returning();
     if (!row) throw AppError.notFound("Empresa no encontrada");
+    // Re-sync solo si el agente no forzó valores de onboarding manualmente.
+    const agentForcedStage =
+      input.onboardingStage !== undefined ||
+      input.profileCompletion !== undefined;
+    if (!agentForcedStage) {
+      await onboardingService.syncStage(companyId).catch(() => {});
+    }
     return row;
   },
 

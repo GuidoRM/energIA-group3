@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
 const TABS = [
@@ -14,7 +15,13 @@ const TABS = [
   { segment: "agent", label: "Agente" },
 ];
 
-export function CompanyTabs({ companyId }: { companyId: string }) {
+export function CompanyTabs({
+  companyId,
+  unreadAlerts = 0,
+}: {
+  companyId: string;
+  unreadAlerts?: number;
+}) {
   const pathname = usePathname();
   const base = `/companies/${companyId}`;
 
@@ -23,20 +30,24 @@ export function CompanyTabs({ companyId }: { companyId: string }) {
       {TABS.map((tab) => {
         const href = tab.segment ? `${base}/${tab.segment}` : base;
         const active =
-          pathname === href ||
-          (tab.segment === "" && pathname === base);
+          pathname === href || (tab.segment === "" && pathname === base);
         return (
           <Link
             key={tab.segment}
             href={href}
             className={cn(
-              "whitespace-nowrap border-b-2 px-3 py-3 text-sm font-medium transition-colors",
+              "flex items-center gap-1.5 whitespace-nowrap border-b-2 px-3 py-3 text-sm font-medium transition-colors",
               active
                 ? "border-primary text-foreground"
                 : "border-transparent text-muted-foreground hover:text-foreground",
             )}
           >
             {tab.label}
+            {tab.segment === "alerts" && unreadAlerts > 0 && (
+              <Badge variant="destructive" className="h-4 min-w-4 px-1 py-0 text-[10px]">
+                {unreadAlerts > 99 ? "99+" : unreadAlerts}
+              </Badge>
+            )}
           </Link>
         );
       })}

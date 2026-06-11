@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { requireSession } from "@/lib/auth";
 import { LOCATION_LABEL, STAGE_LABEL } from "@/lib/format";
+import { alertService } from "@/services/alert.service";
 import { companyService } from "@/services/company.service";
 
 export default async function CompanyLayout({
@@ -16,9 +17,10 @@ export default async function CompanyLayout({
 }) {
   const { companyId } = await params;
   const session = await requireSession();
-  const company = await companyService
-    .getForOrg(companyId, session.organizationId)
-    .catch(() => null);
+  const [company, unreadAlerts] = await Promise.all([
+    companyService.getForOrg(companyId, session.organizationId).catch(() => null),
+    alertService.countUnread(companyId),
+  ]);
   if (!company) notFound();
 
   return (
@@ -45,7 +47,7 @@ export default async function CompanyLayout({
       </div>
 
       <div className="mt-4">
-        <CompanyTabs companyId={companyId} />
+        <CompanyTabs companyId={companyId} unreadAlerts={unreadAlerts} />
       </div>
 
       <div className="p-8">{children}</div>
