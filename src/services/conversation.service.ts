@@ -98,4 +98,11 @@ export const conversationService = {
       .set({ hermesSessionId })
       .where(eq(conversation.id, id));
   },
+
+  async setTitle(id: string, title: string): Promise<void> {
+    await db
+      .update(conversation)
+      .set({ title: title.slice(0, 80) })
+      .where(eq(conversation.id, id));
+  },
 };

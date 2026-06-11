@@ -8,6 +8,7 @@ import { alertService, severityFromVariation } from "./alert.service";
 import { climateService } from "./climate.service";
 import { companyService } from "./company.service";
 import { equipmentService, monthlyConsumption } from "./equipment.service";
+import { onboardingService } from "./onboarding.service";
 
 /**
  * projection.service — el núcleo del sistema (§11).
@@ -134,6 +135,8 @@ export const projectionService = {
         message: buildAlertMessage(variationPct, totalCost, args.forecastTemp),
       });
     }
+
+    await onboardingService.syncStage(companyId).catch(() => {});
 
     return { projection: saved, breakdown };
   },

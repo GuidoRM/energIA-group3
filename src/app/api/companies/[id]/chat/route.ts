@@ -1,8 +1,11 @@
 import { parseJson, route } from "@/lib/api";
 import { requireCompany } from "@/lib/guards";
+import { monthName } from "@/lib/format";
 import { chatMessageSchema } from "@/lib/validation";
+import { alertService } from "@/services/alert.service";
+import { climateService } from "@/services/climate.service";
 import { conversationService } from "@/services/conversation.service";
-import { hermesService, ONBOARDING_PROMPT } from "@/services/hermes.service";
+import { buildSystemPrompt, hermesService } from "@/services/hermes.service";
 
 type Ctx = { params: Promise<{ id: string }> };
 
@@ -14,7 +17,7 @@ type Ctx = { params: Promise<{ id: string }> };
 export function POST(request: Request, ctx: Ctx) {
   return route(async () => {
     const { id } = await ctx.params;
-    const { session } = await requireCompany(id);
+    const { session, company } = await requireCompany(id);
     const input = await parseJson(request, chatMessageSchema);
 
     const conversation = await conversationService.resolve({
@@ -36,6 +39,26 @@ export function POST(request: Request, ctx: Ctx) {
       content: input.message,
     });
 
+    // Auto-título en el primer mensaje del hilo.
+    if (previous.length === 0) {
+      await conversationService.setTitle(conversation.id, input.message.trim());
+    }
+
+    // Temperatura de referencia para el mes actual → inyectar en el prompt.
+    const currentMonth = new Date().getMonth() + 1;
+    const forecastTemp = await climateService.forecastTempFor(
+      company.location,
+      currentMonth,
+    );
+    const systemPrompt = buildSystemPrompt(
+      company.location,
+      monthName(currentMonth),
+      forecastTemp,
+    );
+
+    // Contar alertas antes del stream para detectar alertas nuevas.
+    const preAlertCount = await alertService.countUnread(id);
+
     const encoder = new TextEncoder();
     const send = (
       controller: ReadableStreamDefaultController,
@@ -52,7 +75,7 @@ export function POST(request: Request, ctx: Ctx) {
         try {
           for await (const event of hermesService.stream({
             companyId: id,
-            systemPrompt: ONBOARDING_PROMPT,
+            systemPrompt,
             userMessage: input.message,
             history,
           })) {
@@ -61,7 +84,6 @@ export function POST(request: Request, ctx: Ctx) {
               send(controller, { type: "token", value: event.value });
             } else if (event.type === "tool") {
               toolsUsed.push(event.name);
-              // evento de progreso: "el agente está guardando…" (§10)
               send(controller, { type: "tool", name: event.name });
               await conversationService.addMessage({
                 conversationId: conversation.id,
@@ -80,6 +102,22 @@ export function POST(request: Request, ctx: Ctx) {
             role: "assistant",
             content: assistantText,
           });
+
+          // Si el agente proyectó y generó una alerta nueva, notificar al cliente.
+          if (toolsUsed.includes("project_consumption")) {
+            const postAlertCount = await alertService.countUnread(id);
+            if (postAlertCount > preAlertCount) {
+              const alerts = await alertService.listByCompany(id);
+              const newAlert = alerts.find((a) => !a.isRead);
+              if (newAlert) {
+                send(controller, {
+                  type: "alert",
+                  severity: newAlert.severity,
+                  message: newAlert.message,
+                });
+              }
+            }
+          }
 
           send(controller, { type: "done", tools: toolsUsed });
         } catch (error) {
