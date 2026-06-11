@@ -1,7 +1,7 @@
 import { sql } from "drizzle-orm";
 import { NextResponse } from "next/server";
 
-import { db } from "@/server/db";
+import { db } from "@/db";
 
 /**
  * Health check — verifies the API is up and the database is reachable.

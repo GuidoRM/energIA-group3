@@ -1,0 +1,15 @@
+# Config de Hermes para conectar el MCP server (§9).
+# Copiar a ~/.hermes/config.yaml y ajustar.
+#
+# El `include` es el candado de seguridad: Hermes solo ve estas tools.
+mcp_servers:
+  optimizer:
+    url: "http://localhost:8000/mcp"
+    tools:
+      include:
+        - create_company
+        - update_company
+        - add_equipment
+        - list_equipment
+        - project_consumption
+        - profile_status

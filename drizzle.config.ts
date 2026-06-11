@@ -6,7 +6,7 @@ config({ path: ".env.local" });
 
 export default defineConfig({
   dialect: "postgresql",
-  schema: "./src/server/db/schema/index.ts",
+  schema: "./src/db/schema/index.ts",
   out: "./drizzle",
   casing: "snake_case",
   dbCredentials: {
